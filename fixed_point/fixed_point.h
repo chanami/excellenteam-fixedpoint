@@ -48,11 +48,12 @@ public:
         os << pr.m_cent / pr.TEN_POW << "." << pr.m_cent % pr.TEN_POW  << "\n";
         return os;
     }
-
+    typedef T theType;
+    static const int PERCISION;
 private:
     T m_cent;
-    //static const int TEN_POW=100;
     const T TEN_POW;
+
 };
 int power1 (int x, unsigned int y)
 {
