@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/price.dir/main.cpp.o CMakeFiles/price.dir/fixed_piont.cpp.o  -o price 
