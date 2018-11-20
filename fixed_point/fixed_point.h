@@ -13,6 +13,7 @@ public:
     explicit Fixed_point(T dollar = 0,T cent = 0);
 
     Fixed_point & operator=(T total);
+    Fixed_point & operator=(Fixed_point price);
 
     const Fixed_point operator+(const Fixed_point &price) const;
     const Fixed_point operator-(const Fixed_point &price) const;
@@ -55,7 +56,7 @@ private:
     const T TEN_POW;
 
 };
-int power1 (int x, unsigned int y)
+static int power1 (int x, unsigned int y)
 {
     if (y == 0)
         return 1;
@@ -73,6 +74,12 @@ inline Fixed_point<SIZE,T>::Fixed_point(T dollar, T cent):TEN_POW(power1(10,SIZE
 template <unsigned int SIZE,class T>
 inline Fixed_point<SIZE,T> & Fixed_point<SIZE,T>::operator=(T total) {
     m_cent=total*TEN_POW;
+    return *this;
+}
+
+template <unsigned int SIZE,class T>
+inline Fixed_point<SIZE,T> & Fixed_point<SIZE,T>::operator=(Fixed_point<SIZE,T> price) {
+    m_cent=price.m_cent;
     return *this;
 }
 
@@ -181,7 +188,7 @@ inline bool Fixed_point<SIZE,T>::operator<(const Fixed_point<SIZE,T> &price) con
 }
 template <unsigned int SIZE,class T>
 inline bool Fixed_point<SIZE,T>::operator>(const Fixed_point<SIZE,T> &price) const {
-    return m_cent<price.m_cent;
+    return m_cent>price.m_cent;
 }
 
 
