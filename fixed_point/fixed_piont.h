@@ -9,7 +9,7 @@ class Fixed_point
 {
 
 public:
-    typedef T theType;
+
     explicit Fixed_point(T dollar = 0,T cent = 0);
 
     Fixed_point & operator=(T total);
