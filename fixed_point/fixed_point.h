@@ -4,6 +4,20 @@
 
 #include<iostream>
 
+
+template<unsigned int power>
+struct compilation_pow
+{
+    static const size_t value = compilation_pow<power - 1>::value * 10 ;
+};
+
+template <>
+struct compilation_pow<0>
+{
+    static const size_t value = 1 ;
+};
+
+
 template <unsigned int SIZE,class T = int>
 class Fixed_point
 {
@@ -50,24 +64,16 @@ public:
         return os;
     }
     typedef T theType;
-    static const int PERCISION;
+    enum {PRECISION = SIZE};
+
 private:
     T m_cent;
-    const T TEN_POW;
+    static const T TEN_POW=compilation_pow<SIZE>::value;
 
 };
-static int power1 (int x, unsigned int y)
-{
-    if (y == 0)
-        return 1;
-    else if ((y % 2) == 0)
-        return power1 (x, y / 2) * power1 (x, y / 2);
-    else
-        return x * power1 (x, y / 2) * power1 (x, y / 2);
 
-}
 template <unsigned int SIZE,class T>
-inline Fixed_point<SIZE,T>::Fixed_point(T dollar, T cent):TEN_POW(power1(10,SIZE)){
+inline Fixed_point<SIZE,T>::Fixed_point(T dollar, T cent){
     m_cent=cent + dollar*TEN_POW;
 }
 
@@ -192,4 +198,29 @@ inline bool Fixed_point<SIZE,T>::operator>(const Fixed_point<SIZE,T> &price) con
 }
 
 
+template <typename T>
+class numeric_limits
+{
+public:
+    static const bool is_specialized = false;
+};
+
+
+template<>
+template<unsigned int SIZE, typename T>
+class numeric_limits<Fixed_point<SIZE,T> >
+{
+public:
+    static const bool is_specialized = true;
+    static Fixed_point<SIZE,T> min()
+    {
+        T new_min = numeric_limits<T>::min();
+        return Fixed_point<SIZE,T>(0,new_min);
+    }
+
+    static Fixed_point<SIZE,T> max() {
+        T new_max = numeric_limits<T>::max();
+        return Fixed_point<SIZE,T>(0,new_max);
+    }
+};
 #endif //PRICE_PRICE_H
